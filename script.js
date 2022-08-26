@@ -45,7 +45,7 @@ const GameFlowController = (function(){
         }
         _winningCombinations()
         
-        //Check for a winner
+        //Check for a winner and display a winning combination
         const _checkWinner = ()=>{
             if(_winningCombinations()){
             winnerPopUp.showModal()
@@ -55,6 +55,23 @@ const GameFlowController = (function(){
         }
         _checkWinner()
 
+        //Check for draw
+        const _checkForDraw = ()=>{
+            return [...cellEl].every(cell=>{
+                return cell.classList.contains(X_Marker) || cell.classList.contains(O_Marker)
+            })
+        }
+        _checkForDraw()
+
+        //If there is a draw 
+        const _displayDraw = ()=>{
+            if(_checkForDraw()){
+                winnerPopUp.showModal()
+                const winningText = document.querySelector('[data-winning-mssg]')
+                winningText.innerHTML = `DRAW!`
+            }
+        }
+        _displayDraw()
 
     };
     cellEl.forEach(cell=> cell.addEventListener('click', handleClick, { once:true }))
