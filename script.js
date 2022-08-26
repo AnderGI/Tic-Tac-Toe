@@ -17,7 +17,7 @@ const GameFlowController = (function(){
         [2,4,6],
     ];
     const winnerPopUp = document.getElementById('winnerDialog')
-    let isPlaying = true
+ 
 
     const handleClick = (e)=>{
         const cell = e.target
@@ -35,41 +35,27 @@ const GameFlowController = (function(){
         }
         _switchTurn()
 
-        //Display the content 
-        /*
-        const _displayContent = ()=>{
-          cell.textContent =  circleTurn ? 'X' : 'O'
-        }
-        _displayContent()
-        */
-
-        //Check for win
-        const _winner= () =>{
+        //Check for winning combination
+        const _winningCombinations= () =>{
             return WINNING_COMBINATIONS.some(combination =>{
                 return combination.every(index => {
                     return cellEl[index].classList.contains(currentClass)
                 })
             })
         }
-        _winner()
+        _winningCombinations()
         
-        //Check for a winner and finish whenever there is a winner
+        //Check for a winner
         const _checkWinner = ()=>{
-            isPlaying = _winner() ? false : true
-            if(isPlaying===false){
-                winnerPopUp.showModal()
-                console.log('game over')
+            if(_winningCombinations()){
+            winnerPopUp.showModal()
+            const winningText = document.querySelector('[data-winning-mssg]')
+            winningText.innerHTML = `${circleTurn ? `X's` : `0's`} win!`
             }
         }
         _checkWinner()
 
-        //Restart the game
-        let closeWinningModal = document.getElementById('playAgain')
-            closeWinningModal.addEventListener('click', ()=>{
-                winnerPopUp.close()
-                isPlaying = true
-               
-            })
+
     };
     cellEl.forEach(cell=> cell.addEventListener('click', handleClick, { once:true }))
 })();
