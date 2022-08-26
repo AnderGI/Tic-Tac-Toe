@@ -72,3 +72,49 @@ body{
     width: calc(var(--cellContentSize)*0.7); 
     background-color: white; 
 }
+
+#popUp{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+    width: 20em;
+    height: 20em;
+    box-shadow: 0px 0px 5px 15px rgba(0,0,0,0.4);
+    border: none;  
+    border-radius: 50%;  
+    background-color: black;
+}
+#popUp>div{
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    gap: 1em;
+}
+div[data-winner-mssg]{
+    font-size: 3rem;
+    font-family:Verdana, Geneva, Tahoma, sans-serif;
+    font-weight: 900;
+    color: snow;
+}
+#popUp::backdrop{
+    background-color:rgba(0,0,0,0.5);
+    opacity: 0.8;
+}
+div#restartBtn{
+    padding: 1em 4em;
+    border: 1px solid snow;
+    background-color: snow;
+    color: black;
+    font-size: 1rem;
+    text-transform: uppercase;
+    font-weight: 700;
+    transition: padding ease 0.2s;
+}
+div#restartBtn:hover{
+    cursor: pointer;
+    padding: 1em 6em;
+}
