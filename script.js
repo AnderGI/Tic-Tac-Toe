@@ -1,8 +1,7 @@
-const Gameboard = (function (){
-    let gameboard = []
-})();
 
-const DisplayController = (function(){
+//Everything to do win playing, winning or losing in the game.
+
+const GameFlowController = (function(){
     const cellEl = document.querySelectorAll('.item')
     const X_Marker = "x"
     const O_Marker = "circle"
@@ -17,6 +16,8 @@ const DisplayController = (function(){
         [0,4,8],
         [2,4,6],
     ];
+    const winnerPopUp = document.getElementById('winnerDialog')
+    let isPlaying = true
 
     const handleClick = (e)=>{
         const cell = e.target
@@ -35,10 +36,12 @@ const DisplayController = (function(){
         _switchTurn()
 
         //Display the content 
+        /*
         const _displayContent = ()=>{
           cell.textContent =  circleTurn ? 'X' : 'O'
         }
         _displayContent()
+        */
 
         //Check for win
         const _winner= () =>{
@@ -50,13 +53,23 @@ const DisplayController = (function(){
         }
         _winner()
         
-        //Display winner
-        const _displayWInner = ()=>{
-            if(_winner()){
-                console.log('winner')
+        //Check for a winner and finish whenever there is a winner
+        const _checkWinner = ()=>{
+            isPlaying = _winner() ? false : true
+            if(isPlaying===false){
+                winnerPopUp.showModal()
+                console.log('game over')
             }
         }
-        _displayWInner()
+        _checkWinner()
+
+        //Restart the game
+        let closeWinningModal = document.getElementById('playAgain')
+            closeWinningModal.addEventListener('click', ()=>{
+                winnerPopUp.close()
+                isPlaying = true
+               
+            })
     };
     cellEl.forEach(cell=> cell.addEventListener('click', handleClick, { once:true }))
 })();

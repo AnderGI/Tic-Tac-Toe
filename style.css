@@ -1,17 +1,88 @@
 *{
+    box-sizing: border-box;
     margin: 0;
     padding: 0;
-    box-sizing: border-box;
 }
+body{
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
 .container{
     display: grid;
-    grid-template: 1fr 1fr 1fr/ 1fr 1fr 1fr;
-   
-    width:30em;
-    height: 30em;
+    grid-template: repeat(3,auto)/ repeat(3,auto);
+
     
 }
 .item{
-    border:2px solid black ;
-  
+    width: 8em;
+    height: 8em;
+    border: 2px solid olive;
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.item.x::after, .item.x::before{
+    content: "";
+    height: 8em;
+    width: 2em;
+    position: absolute;
+    background-color:steelblue;
+
+}
+.item.x::after{
+    transform: rotate(45deg);
+}
+.item.x::before{
+    transform: rotate(-45deg);
+}
+
+.item.circle::after, .item.circle::before{
+    content: "";
+    height: 7em;
+    width: 7em;
+    border-radius: 50%;
+    position: absolute;
+    background-color:yellowgreen;
+}
+.item.circle::after{
+    height: 4em;
+    width: 4em;
+    border-radius: 50%;
+    background-color:white;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+.item:first-child, .item:nth-child(2), .item:nth-child(3){
+    border-top: none;
+}
+.item:nth-child(3n+1){
+    border-left:none ;
+}
+.item:nth-child(3n+3){
+    border-right:none ;
+}
+.item:last-child, .item:nth-child(7), .item:nth-child(8){
+    border-bottom: none;
+}
+
+#winnerDialog{
+    position: relative;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
 }
