@@ -1,11 +1,11 @@
-
-//Everything to do win playing, winning or losing in the game.
-
-const GameFlowController = (function(){
-    const cellEl = document.querySelectorAll('.item')
-    const X_Marker = "x"
-    const O_Marker = "circle"
+const controllGameFlow = (function(){
+    const cellEl = document.querySelectorAll('.cell');
+    const X_Marker = 'x'
+    const O_Marker = 'circle'
     let circleTurn = false
+    const dialog = document.getElementById('popUp')
+    const dialogMssg = document.querySelector('[data-winner-mssg]')
+    const restartBtn = document.getElementById('restartBtn')
     const WINNING_COMBINATIONS = [
         [0,1,2],
         [3,4,5],
@@ -16,72 +16,62 @@ const GameFlowController = (function(){
         [0,4,8],
         [2,4,6],
     ];
-    const winnerPopUp = document.getElementById('winnerDialog')
- 
-
     const handleClick = (e)=>{
-        const cell = e.target
-        const currentClass = circleTurn ? O_Marker : X_Marker
-
-        //Add a class when clicking
+        let cell = e.target ;
+        const currentClass = circleTurn ? O_Marker : X_Marker ;
+        //add class
         const _addAClass = ()=>{
             cell.classList.add(currentClass)
         }
         _addAClass()
 
-        //Switch the Turn
-        const _switchTurn = ()=>{
+        //switch class everytime a cell is clicked
+        const _switchClass = ()=>{
             circleTurn = !circleTurn
         }
-        _switchTurn()
 
-        //Check for winning combination
-        const _winningCombinations= () =>{
-            return WINNING_COMBINATIONS.some(combination =>{
-                return combination.every(index => {
+    
+        //check for winning combinations
+        const _winningCombinations = ()=>{
+            return WINNING_COMBINATIONS.some(combination=>{
+                return combination.every(index=>{
                     return cellEl[index].classList.contains(currentClass)
                 })
             })
         }
         _winningCombinations()
-        
-        //Check for a winner and display a winning combination
-        const _checkWinner = ()=>{
-            if(_winningCombinations()){
-            winnerPopUp.showModal()
-            const winningText = document.querySelector('[data-winning-mssg]')
-            winningText.innerHTML = `${circleTurn ? `X's` : `0's`} win!`
-            }
-        }
-        _checkWinner()
 
-        //Check for draw
-        const _checkForDraw = ()=>{
-            return [...cellEl].every(cell=>{
+        //check for draw
+        const _draw = ()=>{
+            return [...cellEl].every(cell =>{
                 return cell.classList.contains(X_Marker) || cell.classList.contains(O_Marker)
             })
         }
-        _checkForDraw()
+        _draw()
 
-        //If there is a draw 
-        const _displayDraw = ()=>{
-            if(_checkForDraw()){
-                winnerPopUp.showModal()
-                const winningText = document.querySelector('[data-winning-mssg]')
-                winningText.innerHTML = `DRAW!`
+        //function that checks and displays win, draw or continue playing
+        const _endGame = ()=>{
+            if(_winningCombinations()){
+                dialog.showModal()
+                dialogMssg.innerHTML = `${circleTurn ? `O's` : `X's`} wins!`
+            }else if(_draw()){
+                dialog.showModal()
+                dialogMssg.innerHTML = 'DRAW!'
+            }else{
+                _switchClass()
             }
         }
-        _displayDraw()
+        _endGame()
 
-    };
-    cellEl.forEach(cell=> cell.addEventListener('click', handleClick, { once:true }))
+        //close modal
+        const _closeModal = ()=>{
+            dialog.close()
+        }
+        restartBtn.addEventListener('click', _closeModal)
+    }
+
+    cellEl.forEach(cell => cell.addEventListener('click', handleClick, { once:true }));
 })();
-
-const Player = (playerName)=>{
-    const sayName = ()=> console.log(`The name of the player is ${playerName}`)
-    return {sayName}
-};
-
 
 
 

@@ -2,87 +2,73 @@
     box-sizing: border-box;
     margin: 0;
     padding: 0;
+    --cellSize: 8em;
+    --cellContentSize: calc(var(--cellSize)*0.9);
 }
 body{
+    display: flex;
+    justify-content: center;
+    align-items: center;
     width: 100vw;
     height: 100vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
 }
-
-.container{
+#container{
     display: grid;
-    grid-template: repeat(3,auto)/ repeat(3,auto);
-
-    
+    grid-template: repeat(3,auto)/repeat(3,auto);
 }
-.item{
-    width: 8em;
-    height: 8em;
+.cell{
+    width: var(--cellSize);
+    height: var(--cellSize);
     border: 2px solid olive;
-    position: relative;
     display: flex;
     justify-content: center;
     align-items: center;
+    position: relative;
 }
-.item.x::after, .item.x::before{
-    content: "";
-    height: 8em;
-    width: 2em;
-    position: absolute;
-    background-color:steelblue;
-
-}
-.item.x::after{
-    transform: rotate(45deg);
-}
-.item.x::before{
-    transform: rotate(-45deg);
-}
-
-.item.circle::after, .item.circle::before{
-    content: "";
-    height: 7em;
-    width: 7em;
-    border-radius: 50%;
-    position: absolute;
-    background-color:yellowgreen;
-}
-.item.circle::after{
-    height: 4em;
-    width: 4em;
-    border-radius: 50%;
-    background-color:white;
-}
-
-
-
-
-
-
-
-
-
-
-
-
-.item:first-child, .item:nth-child(2), .item:nth-child(3){
+.cell:first-child, .cell:nth-child(2), .cell:nth-child(3){
     border-top: none;
 }
-.item:nth-child(3n+1){
-    border-left:none ;
+.cell:nth-child(3n+1){
+    border-left: none;
 }
-.item:nth-child(3n+3){
-    border-right:none ;
+.cell:nth-child(3n+3){
+    border-right: none;
 }
-.item:last-child, .item:nth-child(7), .item:nth-child(8){
+.cell:last-child, .cell:nth-child(7), .cell:nth-child(8){
     border-bottom: none;
 }
 
-#winnerDialog{
-    position: relative;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
+/*display the content if that class*/
+
+.cell.x::before, 
+.cell.x::after{
+    content: '';
+    height: var(--cellContentSize);
+    width: calc(var(--cellContentSize)*0.2);
+    background-color: teal;
+    position: absolute;
+}
+.cell.x::after{
+    transform: rotate(45deg);
+}
+.cell.x::before{
+    transform: rotate(-45deg);
+}
+
+.cell.circle::before, .cell.circle::after{
+    content: '';
+    border-radius: 50%;
+    position: absolute;
+}
+
+.cell.circle::before{
+    height: var(--cellContentSize);
+    width: var(--cellContentSize);
+    background-color:indianred;
+}
+
+.cell.circle::after{
+    height: calc(var(--cellContentSize)*0.7);
+    width: calc(var(--cellContentSize)*0.7); 
+    background-color: white; 
 }
