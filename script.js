@@ -16,6 +16,20 @@ const controllGameFlow = (function(){
         [0,4,8],
         [2,4,6],
     ];
+    
+    //close modal
+    const _restartGame = ()=>{
+            dialog.close()
+            cellEl.forEach(cell=>{
+                cell.classList.remove(X_Marker)
+                cell.classList.remove(O_Marker)
+                cell.removeEventListener('click', handleClick)
+                cell.addEventListener('click', handleClick, { once:true })
+            })
+    }
+
+    restartBtn.addEventListener('click', _restartGame)
+    
     const handleClick = (e)=>{
         let cell = e.target ;
         const currentClass = circleTurn ? O_Marker : X_Marker ;
@@ -63,11 +77,6 @@ const controllGameFlow = (function(){
         }
         _endGame()
 
-        //close modal
-        const _closeModal = ()=>{
-            dialog.close()
-        }
-        restartBtn.addEventListener('click', _closeModal)
     }
 
     cellEl.forEach(cell => cell.addEventListener('click', handleClick, { once:true }));
