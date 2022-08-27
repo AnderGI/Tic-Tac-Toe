@@ -1,3 +1,9 @@
+body{
+    background-color: black;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
 section#introPage{
     width: 100vw;
     height: 100vh;
@@ -5,10 +11,15 @@ section#introPage{
     position: absolute;
     z-index: 1;
     display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
     align-items: center;
     justify-content: center;
     color: snow;
+    width: fit-content;
     font-family: sans-serif;
+    gap: 1.2em;
+    transition: opacity ease 1s, z-index ease 0.5s;
 }
 #glitch{
     position: relative;
@@ -35,8 +46,6 @@ section#introPage{
     animation: glitch 650ms infinite;
     opacity: .8;
     clip-path: polygon(25% 0%, 100% 0%, 79% 46%, 0 46%);
-    /*color: red;
-    z-index: 2;*/
     transform: translate(-0.025em, -0.0125em);
 }
 
@@ -44,10 +53,40 @@ section#introPage{
     animation: glitch 375ms infinite;
     opacity: .8;
     clip-path: polygon(19% 46%, 100% 46%, 72% 100%, 0 100%);
-   /* color: green;
-    z-index: 3;*/
     transform: translate(0.0125em, 0.025em);
 }
+
+#startBtn{
+    width: 100%;
+    padding: 1em 2em;
+    font-family: sans-serif;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    background-color: rgba(255, 255, 255, 0);
+    border: 1px solid red;
+    box-shadow: 
+    0em 0em 1em 0.5rem red
+    ;
+    color: red;
+    text-shadow: 
+    0em 0em 2em yellow
+    ;
+    transition: all ease .2s;
+}
+
+#startBtn:hover, #startBtn:active{
+    cursor: pointer;
+    color: snow;
+    text-shadow: 
+    0em 0em 2em snow
+    ;
+    border: 1px solid snow;
+    box-shadow: 
+    0em 0em 1em 1rem snow
+    ;
+}
+
+
 /*
 @keyframes glitch{
     0%{
