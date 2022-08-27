@@ -5,27 +5,35 @@ body{
     align-items: center;
 }
 section#introPage{
-    width: 100vw;
-    height: 100vh;
-    background-color: black;
-    position: absolute;
-    z-index: 1;
     display: flex;
     flex-direction: column;
     flex-wrap: wrap;
     align-items: center;
     justify-content: center;
+
+    width: 75%;
+    height: 100vh;
+
+    position: absolute;
+
+    background-color: black;
+    padding: 1em 2em;
+    z-index: 1;
     color: snow;
-    width: fit-content;
     font-family: sans-serif;
-    gap: 1.2em;
+    gap: 1.5em;
+
     transition: opacity ease 1s, z-index ease 0.5s;
 }
 #glitch{
+    display: flex;
+    flex-wrap: wrap;
+
     position: relative;
-    font-size: 6rem;
+
+    text-align: justify;
+    font-size: 2rem;
     font-weight: 700;
-    text-transform: uppercase;
     text-shadow: 
     0.05em 0 0 rgba(255, 0, 0, 0.75),
     -0.025em -0.05em 0 rgba(0, 255, 0, 0.75),
@@ -58,7 +66,7 @@ section#introPage{
 
 #startBtn{
     width: 100%;
-    padding: 1em 2em;
+    padding: 1em 0em;
     font-family: sans-serif;
     font-weight: 700;
     letter-spacing: 0.1em;
@@ -82,12 +90,11 @@ section#introPage{
     ;
     border: 1px solid snow;
     box-shadow: 
-    0em 0em 1em 1rem snow
+    0em 0em 1em 0.5rem snow
     ;
 }
 
 
-/*
 @keyframes glitch{
     0%{
         text-shadow: 
@@ -142,7 +149,8 @@ section#introPage{
         ;
     }
 }
-*/
+
+
 @media (prefers-reduced-motion: reduce) {
     *, ::before, ::after {
       animation-delay: -1ms !important;
