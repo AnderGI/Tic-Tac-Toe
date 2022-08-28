@@ -125,16 +125,3 @@ div#playAgainBtn:hover{
     padding: 1em 6em;
 }
 
-/*Points score*/
-section#points{
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-    gap: 6em;
-}
-section#points>div{
-    color: snow;
-    font-size: 2em;
-    font-family: sans-serif;
-    font-weight: 700;
-}

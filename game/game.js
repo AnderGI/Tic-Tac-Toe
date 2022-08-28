@@ -95,19 +95,6 @@ const controllGameFlow = (function(){
         };
         _endGame();
 
-        //function that scores points on x or o
-        const _addPoints = ()=>{
-            const Xscore = document.getElementById('Xscore')
-            const Oscore = document.getElementById('Oscore')
-            if(_winningCombinations()){
-                //it doesnt sum correctly
-                let points = 0
-                points += 1
-                circleTurn ? Oscore.textContent += points : Xscore.textContent += points
-            }
-        };
-        _addPoints();
-
     }
 
     cellEl.forEach(cell => cell.addEventListener('click', handleClick, { once:true }));
