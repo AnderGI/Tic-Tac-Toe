@@ -12,6 +12,8 @@ body{
     width: 100vw;
     height: 100vh;
     position: relative;
+    flex-direction: column;
+    gap: 4em;
     
 }
 
@@ -108,7 +110,7 @@ div[data-winner-mssg]{
     background-color:rgba(0,0,0,0.5);
     opacity: 0.8;
 }
-div#restartBtn{
+div#playAgainBtn{
     padding: 1em 4em;
     border: 1px solid snow;
     background-color: snow;
@@ -118,8 +120,21 @@ div#restartBtn{
     font-weight: 700;
     transition: padding ease 0.2s;
 }
-div#restartBtn:hover{
+div#playAgainBtn:hover{
     cursor: pointer;
     padding: 1em 6em;
 }
 
+/*Points score*/
+section#points{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 6em;
+}
+section#points>div{
+    color: snow;
+    font-size: 2em;
+    font-family: sans-serif;
+    font-weight: 700;
+}

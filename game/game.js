@@ -5,7 +5,7 @@ const controllGameFlow = (function(){
     let circleTurn = false
     const dialog = document.getElementById('popUp')
     const dialogMssg = document.querySelector('[data-winner-mssg]')
-    const restartBtn = document.getElementById('restartBtn')
+    const playAgainBtn = document.getElementById('playAgainBtn')
     const WINNING_COMBINATIONS = [
         [0,1,2],
         [3,4,5],
@@ -17,30 +17,26 @@ const controllGameFlow = (function(){
         [2,4,6],
     ];
 
-    const weaponContainer = document.getElementById('chooseWeapon')
-    const OorX = document.querySelectorAll('.weapon')
-
-    //User choose x or o
-
 
     //Choose weapon O or X
+
+    const weaponContainer = document.getElementById('chooseWeapon')
+    const OorX = document.querySelectorAll('.weapon')
 
     OorX.forEach(element=>{
         element.addEventListener('click',()=>{
             if(element.classList.contains(X_Marker)){
-                console.log('x marker')
                 circleTurn = circleTurn
             } else if (element.classList.contains(O_Marker)){
-                console.log('o marker')
                 circleTurn = !circleTurn
             }
 
-            
+
         })
     });
     
     //close modal
-    const _restartGame = ()=>{
+    const _playAgain = ()=>{
             dialog.close()
             cellEl.forEach(cell=>{
                 cell.classList.remove(X_Marker)
@@ -50,7 +46,7 @@ const controllGameFlow = (function(){
             })
     }
 
-    restartBtn.addEventListener('click', _restartGame)
+    playAgainBtn.addEventListener('click', _playAgain)
     
     const handleClick = (e)=>{
         let cell = e.target ;
@@ -82,8 +78,8 @@ const controllGameFlow = (function(){
             return [...cellEl].every(cell =>{
                 return cell.classList.contains(X_Marker) || cell.classList.contains(O_Marker)
             })
-        }
-        _draw()
+        };
+        _draw();
 
         //function that checks and displays win, draw or continue playing
         const _endGame = ()=>{
@@ -96,8 +92,21 @@ const controllGameFlow = (function(){
             }else{
                 _switchClass()
             }
-        }
-        _endGame()
+        };
+        _endGame();
+
+        //function that scores points on x or o
+        const _addPoints = ()=>{
+            const Xscore = document.getElementById('Xscore')
+            const Oscore = document.getElementById('Oscore')
+            if(_winningCombinations()){
+                //it doesnt sum correctly
+                let points = 0
+                points += 1
+                circleTurn ? Oscore.textContent += points : Xscore.textContent += points
+            }
+        };
+        _addPoints();
 
     }
 
