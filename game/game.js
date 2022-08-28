@@ -29,11 +29,15 @@ const controllGameFlow = (function(){
         element.addEventListener('click',()=>{
             if(element.classList.contains(X_Marker)){
                 console.log('x marker')
+                circleTurn = circleTurn
             } else if (element.classList.contains(O_Marker)){
                 console.log('o marker')
+                circleTurn = !circleTurn
             }
-        } )
-    })
+
+            
+        })
+    });
     
     //close modal
     const _restartGame = ()=>{
