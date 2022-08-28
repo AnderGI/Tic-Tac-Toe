@@ -16,6 +16,10 @@ section#chooseWeapon{
     font-size: 3rem;
     
     width: 75%;
+
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
 }
 
 section#chooseWeapon>section{
@@ -45,7 +49,7 @@ section#introPage{
     align-items: center;
     justify-content: center;
 
-    width: 75%;
+    width: 100vw;
     height: 100vh;
 
     position: absolute;
@@ -57,6 +61,10 @@ section#introPage{
     font-family: sans-serif;
     gap: 1.5em;
 
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+
     transition: opacity ease 1s, z-index ease 0.5s;
 }
 #glitch{
@@ -66,7 +74,7 @@ section#introPage{
     position: relative;
 
     text-align: justify;
-    font-size: 2rem;
+    font-size: clamp(0.5rem, 1rem, 2rem);
     font-weight: 700;
     text-shadow: 
     0.05em 0 0 rgba(255, 0, 0, 0.75),

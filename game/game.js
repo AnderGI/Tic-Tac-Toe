@@ -16,6 +16,24 @@ const controllGameFlow = (function(){
         [0,4,8],
         [2,4,6],
     ];
+
+    const weaponContainer = document.getElementById('chooseWeapon')
+    const OorX = document.querySelectorAll('.weapon')
+
+    //User choose x or o
+
+
+    //Choose weapon O or X
+
+    OorX.forEach(element=>{
+        element.addEventListener('click',()=>{
+            if(element.classList.contains(X_Marker)){
+                console.log('x marker')
+            } else if (element.classList.contains(O_Marker)){
+                console.log('o marker')
+            }
+        } )
+    })
     
     //close modal
     const _restartGame = ()=>{
@@ -81,7 +99,6 @@ const controllGameFlow = (function(){
 
     cellEl.forEach(cell => cell.addEventListener('click', handleClick, { once:true }));
 })();
-
 
 
 

@@ -1,8 +1,7 @@
-const startGame = (function(){
+const introToWeapon = (function(){
     const startBtn = document.getElementById('startBtn')
-    const weaponContainer = document.getElementById('chooseWeapon')
 
-    const _displayTicTacToe = ()=>{
+    const _displayWeaponContainer = ()=>{
         const introSection = document.getElementById('introPage')
         introSection.style.cssText=`
         opacity:0;
@@ -10,5 +9,5 @@ const startGame = (function(){
         `
 
     }
-    startBtn.addEventListener('click', _displayTicTacToe)
+    startBtn.addEventListener('click', _displayWeaponContainer)
 })();
