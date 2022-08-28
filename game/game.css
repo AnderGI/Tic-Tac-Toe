@@ -23,7 +23,7 @@ body{
 .cell{
     width: var(--cellSize);
     height: var(--cellSize);
-    border: 2px solid olive;
+    border: 2px solid #0FFF50;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -74,7 +74,7 @@ body{
 .cell.circle::after{
     height: calc(var(--cellContentSize)*0.7);
     width: calc(var(--cellContentSize)*0.7); 
-    background-color: white; 
+    background-color: black; 
 }
 
 #popUp{
