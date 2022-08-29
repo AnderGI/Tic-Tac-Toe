@@ -2,6 +2,16 @@
 
 const GameBoard = (function(){
     let gameboard = ["","","","","","","","",""]
+    const WINNING_COMBINATIONS = [
+        [0,1,2],
+        [3,4,5],
+        [6,7,8],
+        [0,3,6],
+        [1,4,7],
+        [2,5,8],
+        [0,4,8],
+        [2,4,6],
+    ];
     const getGameBoard = ()=>{
         //return gameBoard
         console.log(gameboard)
@@ -16,9 +26,17 @@ const GameBoard = (function(){
         gameboard[i] = value
         console.log(gameboard[i])
     };
+
+    const winner = (container,value)=>{
+        return WINNING_COMBINATIONS.some(combination=>{
+            return combination.every(index=>{
+                return container[index].classList.contains(value)
+            })
+        })
+    }
     
 
-    return{getGameBoard,restartGameBoard,setGameBoardValue}
+    return{getGameBoard,restartGameBoard,setGameBoardValue, winner}
 })();
 
 const controllGameFlow = (function(){
@@ -46,6 +64,13 @@ const controllGameFlow = (function(){
         }
         switchClass()
 
+        //check for winner
+       const displayWin = ()=>{
+        if(GameBoard.winner(cellElements,currentClass)){
+            console.log('winner!')
+        }
+       }
+       displayWin()
 
     }
   
