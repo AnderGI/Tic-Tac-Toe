@@ -1,3 +1,10 @@
+const gameBoard = (function(){
+    let gameboard = [['0','1','2'],['3','4','5'],['6','7','8']]
+    const _getGameBoard = ()=>{
+        console.log(gameboard)
+    }
+})();
+
 const controllGameFlow = (function(){
     const cellEl = document.querySelectorAll('.cell');
     const X_Marker = 'x'
@@ -17,23 +24,8 @@ const controllGameFlow = (function(){
         [2,4,6],
     ];
 
+    
 
-    //Choose weapon O or X
-
-    const weaponContainer = document.getElementById('chooseWeapon')
-    const OorX = document.querySelectorAll('.weapon')
-
-    OorX.forEach(element=>{
-        element.addEventListener('click',()=>{
-            if(element.classList.contains(X_Marker)){
-                circleTurn = circleTurn
-            } else if (element.classList.contains(O_Marker)){
-                circleTurn = !circleTurn
-            }
-
-
-        })
-    });
     
     //close modal
     const _playAgain = ()=>{
@@ -54,6 +46,7 @@ const controllGameFlow = (function(){
         //add class
         const _addAClass = ()=>{
             cell.classList.add(currentClass)
+           
         }
         _addAClass()
 
@@ -98,6 +91,8 @@ const controllGameFlow = (function(){
     }
 
     cellEl.forEach(cell => cell.addEventListener('click', handleClick, { once:true }));
+
+
 })();
 
 
