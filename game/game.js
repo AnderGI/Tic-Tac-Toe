@@ -14,9 +14,9 @@ const GameBoard = (function(){
     ];
     const getGameBoard = ()=>{
         //return gameBoard
-        console.log(gameboard)
+        return gameboard
     };
-    getGameBoard()
+  
 
    const restartGameBoard = ()=>{
         gameboard = ["","","","","","","","",""]
@@ -24,7 +24,7 @@ const GameBoard = (function(){
 
     const setGameBoardValue = (i,value)=>{
         gameboard[i] = value
-        console.log(gameboard[i])
+        console.log(gameboard)
     };
 
     const winner = (container,value)=>{
@@ -44,6 +44,7 @@ const GameBoard = (function(){
 
     return{getGameBoard,restartGameBoard,setGameBoardValue, winner, draw}
 })();
+
 
 const controllGameFlow = (function(){
     const cellElements = document.querySelectorAll('.cell')
@@ -79,11 +80,9 @@ const controllGameFlow = (function(){
 
         const endGame = ()=>{
             if(GameBoard.winner(cellElements,currentClass)){
-                console.log('winner!')
                 dialogPopUp.showModal()
                 popUpText.textContent = `${circleTurn ? "O" : "X"} wins!` 
             } else if(GameBoard.draw(cellElements, cell, X_Class, O_Class)){
-                console.log('draw!')
                 dialogPopUp.showModal()
                 popUpText.textContent = `Draw!`
             } else{
