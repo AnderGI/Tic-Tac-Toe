@@ -34,9 +34,15 @@ const GameBoard = (function(){
             })
         })
     }
+
+    const draw = (container, cell, Xvalue, Ovalue) =>{
+        return [...container].every(cell=>{
+            return cell.classList.contains(Xvalue) || cell.classList.contains(Ovalue)
+        })
+    }
     
 
-    return{getGameBoard,restartGameBoard,setGameBoardValue, winner}
+    return{getGameBoard,restartGameBoard,setGameBoardValue, winner, draw}
 })();
 
 const controllGameFlow = (function(){
@@ -44,10 +50,12 @@ const controllGameFlow = (function(){
     const X_Class = 'x'
     const O_Class = 'circle'
     let circleTurn = false
+
     const handleClick = (e)=>{
     const cell = e.target
     let currentClass = circleTurn ? O_Class : X_Class
    
+
         //add a class to cell and to its value in gameboard array every time one of the cells is clicked
         const addClassToCell = () => {
             cell.classList.add(currentClass)
@@ -58,21 +66,55 @@ const controllGameFlow = (function(){
         }
         addClassToCell()
 
+
         //switch class on every click
         const switchClass = () => {
             circleTurn = !circleTurn
         }
-        switchClass()
+  
 
-        //check for winner
-       const displayWin = ()=>{
-        if(GameBoard.winner(cellElements,currentClass)){
-            console.log('winner!')
+        //check for winner or draw and display message in the popup text
+        const dialogPopUp = document.getElementById('popUp')
+        const popUpText = document.querySelector('[data-winner-mssg]')
+
+        const endGame = ()=>{
+            if(GameBoard.winner(cellElements,currentClass)){
+                console.log('winner!')
+                dialogPopUp.showModal()
+                popUpText.textContent = `${circleTurn ? "O" : "X"} wins!` 
+            } else if(GameBoard.draw(cellElements, cell, X_Class, O_Class)){
+                console.log('draw!')
+                dialogPopUp.showModal()
+                popUpText.textContent = `Draw!`
+            } else{
+                switchClass()
+            }
         }
-       }
-       displayWin()
+        endGame()
+
+
+         //restart game once a button is clicked either if there is a winner or a draw
+        //remove classlists and event listener and add the event listener once again
+        //so its set up to default value
+        const restartBtn = document.getElementById('restartBtn')
+
+        const restartGame = () =>{
+            cell.classList.remove(X_Class)
+            cell.classList.remove(O_Class)
+            cell.removeEventListener('click', handleClick)
+            cell.addEventListener('click', handleClick, { once:true })
+            GameBoard.restartGameBoard()
+        dialogPopUp.close()
+
+        }
+        restartBtn.addEventListener('click', restartGame)
+
 
     }
+
+
+
+    
   
     cellElements.forEach(cell => cell.addEventListener('click', handleClick, { once:true }))
 })();
