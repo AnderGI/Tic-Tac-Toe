@@ -1,99 +1,60 @@
-const gameBoard = (function(){
-    let gameboard = [['0','1','2'],['3','4','5'],['6','7','8']]
-    const _getGameBoard = ()=>{
+(function(){
+
+const GameBoard = (function(){
+    let gameboard = ["","","","","","","","",""]
+    const getGameBoard = ()=>{
+        //return gameBoard
         console.log(gameboard)
-    }
+    };
+    getGameBoard()
+
+   const restartGameBoard = ()=>{
+        gameboard = ["","","","","","","","",""]
+    };
+
+    const setGameBoardValue = (i,value)=>{
+        gameboard[i] = value
+        console.log(gameboard[i])
+    };
+    
+
+    return{getGameBoard,restartGameBoard,setGameBoardValue}
 })();
 
 const controllGameFlow = (function(){
-    const cellEl = document.querySelectorAll('.cell');
-    const X_Marker = 'x'
-    const O_Marker = 'circle'
+    const cellElements = document.querySelectorAll('.cell')
+    const X_Class = 'x'
+    const O_Class = 'circle'
     let circleTurn = false
-    const dialog = document.getElementById('popUp')
-    const dialogMssg = document.querySelector('[data-winner-mssg]')
-    const playAgainBtn = document.getElementById('playAgainBtn')
-    const WINNING_COMBINATIONS = [
-        [0,1,2],
-        [3,4,5],
-        [6,7,8],
-        [0,3,6],
-        [1,4,7],
-        [2,5,8],
-        [0,4,8],
-        [2,4,6],
-    ];
-
-    
-
-    
-    //close modal
-    const _playAgain = ()=>{
-            dialog.close()
-            cellEl.forEach(cell=>{
-                cell.classList.remove(X_Marker)
-                cell.classList.remove(O_Marker)
-                cell.removeEventListener('click', handleClick)
-                cell.addEventListener('click', handleClick, { once:true })
-            })
-    }
-
-    playAgainBtn.addEventListener('click', _playAgain)
-    
     const handleClick = (e)=>{
-        let cell = e.target ;
-        const currentClass = circleTurn ? O_Marker : X_Marker ;
-        //add class
-        const _addAClass = ()=>{
+    const cell = e.target
+    let currentClass = circleTurn ? O_Class : X_Class
+   
+        //add a class to cell and to its value in gameboard array every time one of the cells is clicked
+        const addClassToCell = () => {
             cell.classList.add(currentClass)
-           
-        }
-        _addAClass()
+            //until.cell it convert the NodeList Obj to array the it searches the index of the clicked cell
 
-        //switch class everytime a cell is clicked
-        const _switchClass = ()=>{
+            GameBoard.setGameBoardValue(Array.prototype.slice.call(cellElements).indexOf(cell), currentClass)
+            GameBoard.getGameBoard()
+        }
+        addClassToCell()
+
+        //switch class on every click
+        const switchClass = () => {
             circleTurn = !circleTurn
         }
+        switchClass()
 
-    
-        //check for winning combinations
-        const _winningCombinations = ()=>{
-            return WINNING_COMBINATIONS.some(combination=>{
-                return combination.every(index=>{
-                    return cellEl[index].classList.contains(currentClass)
-                })
-            })
-        }
-        _winningCombinations()
-
-        //check for draw
-        const _draw = ()=>{
-            return [...cellEl].every(cell =>{
-                return cell.classList.contains(X_Marker) || cell.classList.contains(O_Marker)
-            })
-        };
-        _draw();
-
-        //function that checks and displays win, draw or continue playing
-        const _endGame = ()=>{
-            if(_winningCombinations()){
-                dialog.showModal()
-                dialogMssg.innerHTML = `${circleTurn ? `O's` : `X's`} wins!`
-            }else if(_draw()){
-                dialog.showModal()
-                dialogMssg.innerHTML = 'DRAW!'
-            }else{
-                _switchClass()
-            }
-        };
-        _endGame();
 
     }
+  
+    cellElements.forEach(cell => cell.addEventListener('click', handleClick, { once:true }))
+})();
 
-    cellEl.forEach(cell => cell.addEventListener('click', handleClick, { once:true }));
-
+const Player = (function(){
 
 })();
 
-
+})();
 
