@@ -46,6 +46,37 @@ const GameBoard = (function(){
     return{getGameBoard,restartGameBoard,setGameBoardValue, winner, draw};
 })();
 
+//Player One
+const PlayeOne = (function(){
+    const playerOneCharacter = document.querySelectorAll('.character.playerOne')
+    
+    const selectCharacter = (e)=>{
+        const character = e.target
+        console.log(character.id)
+    };
+
+    playerOneCharacter.forEach(item=> item.addEventListener('click', selectCharacter, {once:true}))
+})();
+
+
+//PLayer Two
+const Playetwo = (function(){
+    const playerTwoCharacter = document.querySelectorAll('.character.playerTwo')
+    
+    const selectCharacter = (e)=>{
+        const character = e.target
+        console.log(character.id)
+    };
+
+    playerTwoCharacter.forEach(item=> item.addEventListener('click', selectCharacter, {once:true}))
+})();
+
+
+
+
+
+
+
 
 const controllGameFlow = (function(){
     
@@ -114,6 +145,12 @@ const controllGameFlow = (function(){
 
 })();
 
+
+
+
+
+
+/*
 const Player = (function(){
 
 })();
@@ -126,6 +163,6 @@ const AI = (function(){
     }
 })();
 
-
+*/
 })();
 
