@@ -70,6 +70,24 @@ body{
     background-size: cover;
     background-position: center;
 }
+.cell.Jerry{
+    background: url(./Img/jerry-smith.png);
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+}
+.cell.King_Jellybean{
+    background: url(./Img/jellybean.png);
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+}
+.cell.Krombopulos_Michael{
+    background: url(./Img/krompulusMichael.jpeg);
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+}
 
 
 
@@ -234,6 +252,24 @@ div.character#Morty{
 }
 div.character#Turkey_Obama{
     background: url(./Img/turkeyObama.jpg);
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+}
+div.character#Jerry{
+    background: url(./Img/jerry-smith.png);
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+}
+div.character#King_Jellybean{
+    background: url(./Img/jellybean.png);
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+}
+div.character#Krombopulos_Michael{
+    background: url(./Img/krompulusMichael.jpeg);
     background-repeat: no-repeat;
     background-size: cover;
     background-position: center;
