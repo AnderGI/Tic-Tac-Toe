@@ -1,7 +1,9 @@
 (function(){
 
-const GameBoard = (function(){
     let gameboard = ["","","","","","","","",""]
+
+const GameBoard = (function(){
+    
     const WINNING_COMBINATIONS = [
         [0,1,2],
         [3,4,5],
@@ -12,12 +14,12 @@ const GameBoard = (function(){
         [0,4,8],
         [2,4,6],
     ];
+
     const getGameBoard = ()=>{
         //return gameBoard
         return gameboard
     };
   
-
    const restartGameBoard = ()=>{
         gameboard = ["","","","","","","","",""]
     };
@@ -33,20 +35,20 @@ const GameBoard = (function(){
                 return container[index].classList.contains(value)
             })
         })
-    }
+    };
 
     const draw = (container, cell, Xvalue, Ovalue) =>{
         return [...container].every(cell=>{
             return cell.classList.contains(Xvalue) || cell.classList.contains(Ovalue)
         })
-    }
+    };
     
-
-    return{getGameBoard,restartGameBoard,setGameBoardValue, winner, draw}
+    return{getGameBoard,restartGameBoard,setGameBoardValue, winner, draw};
 })();
 
 
 const controllGameFlow = (function(){
+    
     const cellElements = document.querySelectorAll('.cell')
     const X_Class = 'x'
     const O_Class = 'circle'
@@ -56,7 +58,6 @@ const controllGameFlow = (function(){
     const cell = e.target
     let currentClass = circleTurn ? O_Class : X_Class
    
-
         //add a class to cell and to its value in gameboard array every time one of the cells is clicked
         const addClassToCell = () => {
             cell.classList.add(currentClass)
@@ -64,9 +65,9 @@ const controllGameFlow = (function(){
 
             GameBoard.setGameBoardValue(Array.prototype.slice.call(cellElements).indexOf(cell), currentClass)
             GameBoard.getGameBoard()
+            
         }
         addClassToCell()
-
 
         //switch class on every click
         const switchClass = () => {
@@ -92,7 +93,7 @@ const controllGameFlow = (function(){
         endGame()
 
 
-         //restart game once a button is clicked either if there is a winner or a draw
+        //restart game once a button is clicked either if there is a winner or a draw
         //remove classlists and event listener and add the event listener once again
         //so its set up to default value
         const restartBtn = document.getElementById('restartBtn')
@@ -107,20 +108,24 @@ const controllGameFlow = (function(){
 
         }
         restartBtn.addEventListener('click', restartGame)
-
-
     }
 
-
-
-    
-  
     cellElements.forEach(cell => cell.addEventListener('click', handleClick, { once:true }))
+
 })();
 
 const Player = (function(){
 
 })();
+
+
+const AI = (function(){
+
+    const bestMove = ()=>{
+
+    }
+})();
+
 
 })();
 
