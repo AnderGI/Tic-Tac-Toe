@@ -3,6 +3,7 @@
     let gameboard = ["","","","","","","","",""]
     let secondPlayer;
     let firstPlayer;
+    const start = document.getElementById('start')
 
 const GameBoard = (function(){
     
@@ -52,14 +53,17 @@ const GameBoard = (function(){
 
 const PlayeOne = (function(){
     const playerOneCharacter = document.querySelectorAll('.character.playerOne')
-    
-    const setFirstCharacter = (e)=>{
+    const selectFirstCharacter = (e)=>{
         const character = e.target
-        console.log(character.id)
         firstPlayer = character.id
+        const playerOneBtn = document.getElementById('playerOneBtn')
+        playerOneBtn.addEventListener('click', ()=>{ 
+            start.textContent =`Waiting for Player Two...`
+            playerOneBtn.textContent = firstPlayer
+        },)
     };
 
-    playerOneCharacter.forEach(item=> item.addEventListener('click', setFirstCharacter, {once:true}))
+    playerOneCharacter.forEach(item=> item.addEventListener('click', selectFirstCharacter))
 })();
 
 
@@ -69,11 +73,15 @@ const Playertwo = (function(){
     const playerTwoCharacter = document.querySelectorAll('.character.playerTwo')      
     const setSecondCharacter = (e) => {
         const character = e.target 
-        console.log(character.id)
         secondPlayer = character.id
+        const playerTwoBtn = document.getElementById('playerTwoBtn')
+        playerTwoBtn.addEventListener('click', ()=>{
+            start.textContent =`Start the Fight!`
+            playerTwoBtn.textContent = secondPlayer
+        },)
     }
 
-    playerTwoCharacter.forEach(item=> item.addEventListener('click', setSecondCharacter, {once:true}))
+    playerTwoCharacter.forEach(item=> item.addEventListener('click', setSecondCharacter))
 
 })();
 
@@ -83,20 +91,15 @@ const controllGameFlow = (function(){
     
     const cellElements = document.querySelectorAll('.cell')
    
-   // const X_Class = 'x'
-    //const O_Class = 'circle'
-    //let circleTurn = false
     let secondPlayerTurn = false
     const handleClick = (e)=>{
     const cell = e.target
-    //let currentClass = circleTurn ? O_Class : X_Class
     let currentClass = secondPlayerTurn ? secondPlayer : firstPlayer
    
         //add a class to cell and to its value in gameboard array every time one of the cells is clicked
         const addClassToCell = () => {
             cell.classList.add(currentClass)
             //until.call it convert the NodeList Obj to array the it searches the index of the clicked cell
-
             GameBoard.setGameBoardValue(Array.prototype.slice.call(cellElements).indexOf(cell), currentClass)
             GameBoard.getGameBoard()
             
@@ -148,27 +151,7 @@ const controllGameFlow = (function(){
 
 })();
 
-
-
-
-
-
-/*
-const Player = (function(){
-
-})();
-
-
-const AI = (function(){
-
-    const bestMove = ()=>{
-
-    }
-})();
-
-*/
-
-/*set tic tac toe viible*/
+/*set tic tac toe viible (from the intro page to the game)*/
 const setTicTacVisible = (function(){
     const start = document.getElementById('start')
     const visible = ()=>{
@@ -181,5 +164,10 @@ const setTicTacVisible = (function(){
 
     start.addEventListener('click',visible)
 })();
+
+
+
+
+
 })();
 
