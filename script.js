@@ -1,6 +1,8 @@
 (function(){
 
     let gameboard = ["","","","","","","","",""]
+    let secondPlayer;
+    let firstPlayer;
 
 const GameBoard = (function(){
     
@@ -37,9 +39,9 @@ const GameBoard = (function(){
         })
     };
 
-    const draw = (container, cell, Xvalue, Ovalue) =>{
+    const draw = (container, cell, first, second) =>{
         return [...container].every(cell=>{
-            return cell.classList.contains(Xvalue) || cell.classList.contains(Ovalue)
+            return cell.classList.contains(first) || cell.classList.contains(second)
         })
     };
     
@@ -47,52 +49,53 @@ const GameBoard = (function(){
 })();
 
 //Player One
+
 const PlayeOne = (function(){
     const playerOneCharacter = document.querySelectorAll('.character.playerOne')
     
-    const selectCharacter = (e)=>{
+    const setFirstCharacter = (e)=>{
         const character = e.target
         console.log(character.id)
+        firstPlayer = character.id
     };
 
-    playerOneCharacter.forEach(item=> item.addEventListener('click', selectCharacter, {once:true}))
+    playerOneCharacter.forEach(item=> item.addEventListener('click', setFirstCharacter, {once:true}))
 })();
 
 
 //PLayer Two
-const Playetwo = (function(){
-    const playerTwoCharacter = document.querySelectorAll('.character.playerTwo')
-    
-    const selectCharacter = (e)=>{
-        const character = e.target
+
+const Playertwo = (function(){
+    const playerTwoCharacter = document.querySelectorAll('.character.playerTwo')      
+    const setSecondCharacter = (e) => {
+        const character = e.target 
         console.log(character.id)
-    };
+        secondPlayer = character.id
+    }
 
-    playerTwoCharacter.forEach(item=> item.addEventListener('click', selectCharacter, {once:true}))
+    playerTwoCharacter.forEach(item=> item.addEventListener('click', setSecondCharacter, {once:true}))
+
 })();
-
-
-
-
-
 
 
 
 const controllGameFlow = (function(){
     
     const cellElements = document.querySelectorAll('.cell')
-    const X_Class = 'x'
-    const O_Class = 'circle'
-    let circleTurn = false
-
+   
+   // const X_Class = 'x'
+    //const O_Class = 'circle'
+    //let circleTurn = false
+    let secondPlayerTurn = false
     const handleClick = (e)=>{
     const cell = e.target
-    let currentClass = circleTurn ? O_Class : X_Class
+    //let currentClass = circleTurn ? O_Class : X_Class
+    let currentClass = secondPlayerTurn ? secondPlayer : firstPlayer
    
         //add a class to cell and to its value in gameboard array every time one of the cells is clicked
         const addClassToCell = () => {
             cell.classList.add(currentClass)
-            //until.cell it convert the NodeList Obj to array the it searches the index of the clicked cell
+            //until.call it convert the NodeList Obj to array the it searches the index of the clicked cell
 
             GameBoard.setGameBoardValue(Array.prototype.slice.call(cellElements).indexOf(cell), currentClass)
             GameBoard.getGameBoard()
@@ -102,7 +105,7 @@ const controllGameFlow = (function(){
 
         //switch class on every click
         const switchClass = () => {
-            circleTurn = !circleTurn
+            secondPlayerTurn = !secondPlayerTurn
         }
   
 
@@ -113,8 +116,8 @@ const controllGameFlow = (function(){
         const endGame = ()=>{
             if(GameBoard.winner(cellElements,currentClass)){
                 dialogPopUp.showModal()
-                popUpText.textContent = `${circleTurn ? "O" : "X"} wins!` 
-            } else if(GameBoard.draw(cellElements, cell, X_Class, O_Class)){
+                popUpText.textContent = `${secondPlayerTurn ? secondPlayer : firstPlayer} wins!` 
+            } else if(GameBoard.draw(cellElements, cell, firstPlayer, secondPlayer)){
                 dialogPopUp.showModal()
                 popUpText.textContent = `Draw!`
             } else{
@@ -130,8 +133,8 @@ const controllGameFlow = (function(){
         const restartBtn = document.getElementById('restartBtn')
 
         const restartGame = () =>{
-            cell.classList.remove(X_Class)
-            cell.classList.remove(O_Class)
+            cell.classList.remove(firstPlayer)
+            cell.classList.remove(secondPlayer)
             cell.removeEventListener('click', handleClick)
             cell.addEventListener('click', handleClick, { once:true })
             GameBoard.restartGameBoard()
@@ -164,5 +167,19 @@ const AI = (function(){
 })();
 
 */
+
+/*set tic tac toe viible*/
+const setTicTacVisible = (function(){
+    const start = document.getElementById('start')
+    const visible = ()=>{
+        const intro = document.getElementById('introPage')
+        intro.style.cssText = `
+        opacity:0;
+        z-index:-1;
+        `
+    }
+
+    start.addEventListener('click',visible)
+})();
 })();
 
