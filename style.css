@@ -153,6 +153,28 @@ main{
     align-items: center;
 }
 /*Character container*/
+#introPage>main{
+    display: grid;
+    grid-template-areas: 
+    "one one . two two"
+    "one one . two two"
+    "one one . two two"
+    ". btn btn btn ."
+    ;
+}
+
+section#one{
+    grid-area: one;
+}
+section#two{
+    grid-area: two;
+}
+button#start{
+    grid-area: btn;
+}
+
+
+
 main>section{
     display: flex;
     flex-direction: column;
@@ -176,8 +198,8 @@ main>section>div{
 }
 main>section>button{
     clip-path: polygon(25% 0%, 100% 0%, 75% 100%, 0% 100%);
-    padding: 1em 4em;
-    font-size: 2em;
+    padding: 1em 2em;
+    font-size: 1em;
     font-weight: 700;
     font-family: sans-serif;
 }
