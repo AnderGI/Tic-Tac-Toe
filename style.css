@@ -123,7 +123,7 @@ div[data-winner-mssg]{
     background-color:rgba(0,0,0,0.5);
     opacity: 0.8;
 }
-div#restartBtn{
+div#restartBtn, div#changeCharacterBtn{
     padding: 1em 4em;
     border: 1px solid snow;
     background-color: snow;
