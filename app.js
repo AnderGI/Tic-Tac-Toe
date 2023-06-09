@@ -208,10 +208,26 @@ const Controller = (function () {
     }
   };
 
+  const getPlayerMarker = () => {
+    return player1Turn === true ? playerOne.getMarker() : playerTwo.getMarker();
+  };
+
+  const playerMove = (domIndex) => {
+    const gameboard = Gameboard.getGameboard();
+    const [xCoordinate, yCoordinate] = domIndexToArrayIndex[domIndex];
+    player1Turn === true
+      ? playerOne.makeMove(xCoordinate, yCoordinate)
+      : playerTwo.makeMove(xCoordinate, yCoordinate);
+
+    changeTurn();
+  };
+
   return {
     checkGameStatus,
     cellClicked,
     createPlayers,
+    getPlayerMarker,
+    playerMove,
   };
 })();
 
@@ -261,11 +277,6 @@ const DOM = (function () {
 
   const hideMenuContainer = () => {
     document.querySelector("div.menu").classList.add("hidden");
-    //WHen menu is hidden
-    //render gameboard
-    startGameBtn.addEventListener("transitionend", () => {
-      renderGameboard();
-    });
   };
 
   const renderGameboard = () => {
@@ -282,6 +293,16 @@ const DOM = (function () {
     gameboardContainer.classList.remove("hidden");
   };
 
+  const cellClicked = (e) => {
+    const btn = e.target;
+    //add class X or O accoding to players turn
+    btn.classList.add(Controller.getPlayerMarker());
+    //player makes a click on a cell (it has an index)
+    Controller.playerMove(
+      [...document.querySelectorAll("div.cell")].indexOf(btn)
+    );
+  };
+
   const registerEvents = () => {
     playerBtns.forEach((btn) => {
       btn.addEventListener("click", (e) => playerBtnClicked(e));
@@ -290,6 +311,15 @@ const DOM = (function () {
     startGameBtn.addEventListener("click", () => {
       startGameBtnClicked();
       hideMenuContainer();
+      renderGameboard();
+
+      //Gameboard cells
+      const cells = [...document.querySelectorAll("div.cell")];
+      cells.forEach((cell) => {
+        cell.addEventListener("click", (e) => {
+          cellClicked(e);
+        });
+      });
     });
   };
 
