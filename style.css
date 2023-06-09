@@ -33,6 +33,13 @@ div.menu {
     "StartBtn StartBtn StartBtn StartBtn";
   column-gap: 2em;
   row-gap: 1em;
+  transition: opacity ease 3s, z-index ease 3s;
+}
+
+div.menu.hidden,
+div.container.hidden {
+  opacity: 0;
+  z-index: -1;
 }
 
 div.menu button {
@@ -116,6 +123,42 @@ div.menu button#startGameBtn.dissapear {
 }
 
 /*No AI implementation for now*/
-div.menu button.AI{
+div.menu button.AI {
   pointer-events: none;
   filter: blur(0.1em);
+}
+
+/*CONTAINER*/
+div.container {
+  position: absolute;
+  height: 60vh;
+  width: 30vw;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(3, 1fr);
+  transition: opacity ease 8s, z-index ease 8s;
+}
+
+div.container div {
+  border: 2px solid var(--amber);
+}
+
+div.container div:first-child,
+div.container div:nth-child(2),
+div.container div:nth-child(3) {
+  border-top: none;
+}
+
+div.container div:nth-child(3n + 1) {
+  border-left: none;
+}
+
+div.container div:nth-child(3n + 3) {
+  border-right: none;
+}
+
+div.container div:last-child,
+div.container div:nth-child(8),
+div.container div:nth-child(7) {
+  border-bottom: none;
+}

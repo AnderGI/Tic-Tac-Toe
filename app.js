@@ -194,7 +194,11 @@ const Controller = (function () {
     changeTurn();
   };
 
-  const createHumanPlayer = () => {};
+  const createHumanPlayer = (key) => {
+    key === "playerOne"
+      ? (playerOne = HumanPlayer("X"))
+      : (playerTwo = HumanPlayer("O"));
+  };
 
   const createAIPlayer = () => {};
 
@@ -218,6 +222,9 @@ const DOM = (function () {
   //start game btn
   const startGameBtn = document.getElementById("startGameBtn");
 
+  //Const gameboard container
+  const gameboardContainer = document.querySelector("div.container");
+
   //select player one and two buttons
   const removeSelectedClassFromBtnGroup = (classname) => {
     playerBtns
@@ -232,7 +239,6 @@ const DOM = (function () {
   };
 
   //once startgame is clicked get the selected elements
-
   const startGameBtnClicked = () => {
     const selectedBtns = playerBtns.filter((btn) =>
       btn.classList.contains("selected")
@@ -253,6 +259,29 @@ const DOM = (function () {
     }
   };
 
+  const hideMenuContainer = () => {
+    document.querySelector("div.menu").classList.add("hidden");
+    //WHen menu is hidden
+    //render gameboard
+    startGameBtn.addEventListener("transitionend", () => {
+      renderGameboard();
+    });
+  };
+
+  const renderGameboard = () => {
+    gameboardContainer.replaceChildren();
+
+    for (let i = 0; i < Gameboard.getGameboard().length; i++) {
+      const fila = Gameboard.getGameboard()[i];
+      for (let celda = 0; celda < fila.length; celda++) {
+        const celdaDiv = document.createElement("div");
+        celdaDiv.setAttribute("class", "cell");
+        gameboardContainer.append(celdaDiv);
+      }
+    }
+    gameboardContainer.classList.remove("hidden");
+  };
+
   const registerEvents = () => {
     playerBtns.forEach((btn) => {
       btn.addEventListener("click", (e) => playerBtnClicked(e));
@@ -260,6 +289,7 @@ const DOM = (function () {
 
     startGameBtn.addEventListener("click", () => {
       startGameBtnClicked();
+      hideMenuContainer();
     });
   };
 
