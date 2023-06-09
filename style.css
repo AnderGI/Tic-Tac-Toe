@@ -114,3 +114,8 @@ div.menu button#startGameBtn.dissapear {
   opacity: 0;
   z-index: -1;
 }
+
+/*No AI implementation for now*/
+div.menu button.AI{
+  pointer-events: none;
+  filter: blur(0.1em);
