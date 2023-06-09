@@ -47,8 +47,8 @@ const HumanPlayer = (playerMark) => {
 };
 
 const Controller = (function () {
-  const playerX = HumanPlayer("X");
-  const playerO = HumanPlayer("O");
+  let playerOne = null;
+  let playerTwo = null;
   let player1Turn = true;
   const domIndexToArrayIndex = {
     0: [0, 0],
@@ -194,18 +194,38 @@ const Controller = (function () {
     changeTurn();
   };
 
+  const createHumanPlayer = (key) => {
+    key === "playerOne"
+      ? (playerOne = HumanPlayer("X"))
+      : (playerTwo = HumanPlayer("O"));
+  };
+
+  const createAIPlayer = () => {};
+
+  const createPlayers = (playersObj) => {
+    for (const [key, value] of Object.entries(playersObj)) {
+      value === "human" ? createHumanPlayer(key) : createAIPlayer(key);
+    }
+  };
+
   return {
     checkGameStatus,
     cellClicked,
+    createPlayers,
   };
 })();
 
 const DOM = (function () {
   //player one and two btns nodelist insto an array
   const playerBtns = [...document.querySelectorAll("button.player")];
+
   //start game btn
   const startGameBtn = document.getElementById("startGameBtn");
 
+  //Const gameboard container
+  const gameboardContainer = document.querySelector("div.container");
+
+  //select player one and two buttons
   const removeSelectedClassFromBtnGroup = (classname) => {
     playerBtns
       .filter((el) => el.classList.contains(classname))
@@ -218,9 +238,58 @@ const DOM = (function () {
     btn.classList.add("selected");
   };
 
+  //once startgame is clicked get the selected elements
+  const startGameBtnClicked = () => {
+    const selectedBtns = playerBtns.filter((btn) =>
+      btn.classList.contains("selected")
+    );
+
+    if (selectedBtns.length !== 0) {
+      const playerOneBtn = selectedBtns[0];
+      const playerOneType = [...playerOneBtn.classList][2]; //3rd class human or ai
+      const playerTwoBtn = selectedBtns[1];
+      const playerTwoType = [...playerTwoBtn.classList][2]; //3rd class human or ai
+
+      const players = {
+        playerOne: playerOneType,
+        playerTwo: playerTwoType,
+      };
+
+      Controller.createPlayers(players);
+    }
+  };
+
+  const hideMenuContainer = () => {
+    document.querySelector("div.menu").classList.add("hidden");
+    //WHen menu is hidden
+    //render gameboard
+    startGameBtn.addEventListener("transitionend", () => {
+      renderGameboard();
+    });
+  };
+
+  const renderGameboard = () => {
+    gameboardContainer.replaceChildren();
+
+    for (let i = 0; i < Gameboard.getGameboard().length; i++) {
+      const fila = Gameboard.getGameboard()[i];
+      for (let celda = 0; celda < fila.length; celda++) {
+        const celdaDiv = document.createElement("div");
+        celdaDiv.setAttribute("class", "cell");
+        gameboardContainer.append(celdaDiv);
+      }
+    }
+    gameboardContainer.classList.remove("hidden");
+  };
+
   const registerEvents = () => {
     playerBtns.forEach((btn) => {
       btn.addEventListener("click", (e) => playerBtnClicked(e));
+    });
+
+    startGameBtn.addEventListener("click", () => {
+      startGameBtnClicked();
+      hideMenuContainer();
     });
   };
 
