@@ -1,0 +1,116 @@
+html {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  height: 100vh;
+  --bodyBackgroundColor: #fff7ed;
+  --amber: #f59e0b;
+}
+
+body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  background-color: var(--bodyBackgroundColor);
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  font-family: "Press Start 2P", cursive;
+  font-size: 16px;
+}
+
+/*Menu*/
+div.menu {
+  position: absolute;
+  display: grid;
+  grid-template-areas:
+    "P1p P1p P2p P2p"
+    "P1HBtn P1HBtn P2HBtn P2HBtn"
+    "P1AIBtn P1AIBtn P2AIBtn P2AIBtn"
+    "StartBtn StartBtn StartBtn StartBtn";
+  column-gap: 2em;
+  row-gap: 1em;
+}
+
+div.menu button {
+  border: none;
+  background-color: transparent;
+  border-radius: 0.1em;
+  padding: 0.5em 1em;
+  font-size: 1.5rem;
+  font-weight: 900;
+  font-family: monospace;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+div.menu button.playerOne:hover,
+div.menu button.playerOne.selected,
+div.menu button.playerTwo:hover,
+div.menu button.playerTwo.selected {
+  background-color: var(--amber);
+  color: var(--bodyBackgroundColor);
+}
+
+div.menu p:first-of-type {
+  grid-area: P1p;
+}
+
+div.menu p:last-of-type {
+  grid-area: P2p;
+}
+
+div.menu button.playerOne.human {
+  grid-area: P1HBtn;
+}
+
+div.menu button.playerOne.AI {
+  grid-area: P1AIBtn;
+}
+
+div.menu button.playerTwo.human {
+  grid-area: P2HBtn;
+}
+
+div.menu button.playerTwo.AI {
+  grid-area: P2AIBtn;
+}
+
+div.menu button#startGameBtn {
+  grid-area: StartBtn;
+  transition: z-index ease-out 250ms, transform ease-out 250ms,
+    background-color ease-out 250ms;
+}
+
+div.menu button#startGameBtn:hover {
+  z-index: 1;
+  transform: rotate(5deg) scale(1.5);
+  background-color: var(--amber);
+}
+
+div.menu * {
+  transition: transform ease 3s, opacity ease 3s, z-index ease 3s;
+}
+
+div.menu p:first-of-type.dissapear,
+div.menu button.playerOne.dissapear {
+  transform: translateX(-8em);
+  opacity: 0;
+  z-index: -1;
+}
+
+div.menu p:last-of-type.dissapear,
+div.menu button.playerTwo.dissapear {
+  transform: translateX(8em);
+  opacity: 0;
+  z-index: -1;
+}
+
+div.menu button#startGameBtn.dissapear {
+  transform: translateY(8em);
+  opacity: 0;
+  z-index: -1;
+}
