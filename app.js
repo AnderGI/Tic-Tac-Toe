@@ -165,35 +165,6 @@ const Controller = (function () {
     return status;
   };
 
-  const cellClicked = (index) => {
-    //posiciones a partir de la relacion entre el indice del div del dom y el gameboard
-    const [x, y] = domIndexToArrayIndex[index];
-
-    //usuario hace ese movimiento
-    if (player1Turn) {
-      playerX.makeMove(x, y);
-    } else {
-      playerO.makeMove(x, y);
-    }
-
-    //mirar estado y renderizar mensaje en funcion a ello
-    const { winnerSymbol, gameStatus } = checkGameStatus();
-
-    if (gameStatus === "Draw") {
-      DOM.renderGameMessage("Its a draw !!!!");
-    }
-
-    if (gameStatus === "End") {
-      winnerSymbol === playerX.getMarker()
-        ? playerX.increasePoints()
-        : playerO.increasePoints();
-      DOM.renderGameMessage(`${winnerSymbol} winssssss!`);
-    }
-
-    //cambiar turno
-    changeTurn();
-  };
-
   const createHumanPlayer = (key) => {
     key === "playerOne"
       ? (playerOne = HumanPlayer("X"))
@@ -208,10 +179,42 @@ const Controller = (function () {
     }
   };
 
+  const getPlayerMarker = () => {
+    return player1Turn === true ? playerOne.getMarker() : playerTwo.getMarker();
+  };
+
+  const playerMove = (domIndex) => {
+    const [xCoordinate, yCoordinate] = domIndexToArrayIndex[domIndex];
+    player1Turn === true
+      ? playerOne.makeMove(xCoordinate, yCoordinate)
+      : playerTwo.makeMove(xCoordinate, yCoordinate);
+
+    //mirar estado y renderizar mensaje en funcion a ello
+    const { winnerSymbol, gameStatus } = checkGameStatus();
+    console.log(winnerSymbol, gameStatus);
+    if (gameStatus === "Draw") {
+      //DOM.renderGameMessage("Its a draw !!!!");
+      console.log("Its a draw !!!!");
+    }
+
+    if (gameStatus === "End") {
+      winnerSymbol === playerOne.getMarker()
+        ? playerOne.increasePoints()
+        : playerTwo.increasePoints();
+
+      //DOM.renderGameMessage(`${winnerSymbol} winssssss!`);
+      console.log(`${winnerSymbol} winssssss!`);
+    }
+
+    //cambiar turno
+    changeTurn();
+  };
+
   return {
     checkGameStatus,
-    cellClicked,
     createPlayers,
+    getPlayerMarker,
+    playerMove,
   };
 })();
 
@@ -261,11 +264,6 @@ const DOM = (function () {
 
   const hideMenuContainer = () => {
     document.querySelector("div.menu").classList.add("hidden");
-    //WHen menu is hidden
-    //render gameboard
-    startGameBtn.addEventListener("transitionend", () => {
-      renderGameboard();
-    });
   };
 
   const renderGameboard = () => {
@@ -276,10 +274,21 @@ const DOM = (function () {
       for (let celda = 0; celda < fila.length; celda++) {
         const celdaDiv = document.createElement("div");
         celdaDiv.setAttribute("class", "cell");
+        const divChild = document.createElement("div");
+        celdaDiv.append(divChild);
         gameboardContainer.append(celdaDiv);
       }
     }
     gameboardContainer.classList.remove("hidden");
+  };
+
+  const cellClicked = (target) => {
+    //add class X or O accoding to players turn
+    target.classList.add(Controller.getPlayerMarker(), "clicked");
+    //player makes a click on a cell (take the index of the parent div which is the one forming the container)
+    Controller.playerMove(
+      [...document.querySelectorAll("div.cell")].indexOf(target.parentElement)
+    );
   };
 
   const registerEvents = () => {
@@ -290,6 +299,26 @@ const DOM = (function () {
     startGameBtn.addEventListener("click", () => {
       startGameBtnClicked();
       hideMenuContainer();
+      renderGameboard();
+
+      //Gameboard cells
+      const cells = [...document.querySelectorAll("div.cell")];
+      cells.forEach((cell) => {
+        cell.addEventListener("mouseover", (e) => {
+          const target = e.target;
+          target.classList.add(Controller.getPlayerMarker(), "opaque");
+
+          cell.addEventListener("mouseout", (e) => {
+            const target = e.target;
+            target.classList.remove(Controller.getPlayerMarker(), "opaque");
+          });
+        });
+
+        cell.addEventListener("click", (e) => {
+          const target = e.target;
+          cellClicked(target);
+        });
+      });
     });
   };
 

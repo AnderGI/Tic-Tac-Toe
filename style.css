@@ -5,6 +5,8 @@ html {
   height: 100vh;
   --bodyBackgroundColor: #fff7ed;
   --amber: #f59e0b;
+  --pink: #ec4899;
+  --blue: #3b82f6;
 }
 
 body {
@@ -141,6 +143,60 @@ div.container {
 
 div.container div {
   border: 2px solid var(--amber);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+}
+
+div.container > div > div {
+  width: 90%;
+  height: 90%;
+  border: none;
+}
+
+div.container > div > div.clicked {
+  pointer-events: none;
+}
+
+div.container > div > div.X::before,
+div.container > div > div.X::after {
+  content: "";
+  height: 80%;
+  width: 10%;
+  position: absolute;
+  background-color: var(--pink);
+}
+
+div.container > div > div.X::before {
+  transform: rotate(45deg);
+}
+
+div.container > div > div.X::after {
+  transform: rotate(-45deg);
+}
+
+div.container > div > div.O::before,
+div.container > div > div.O::after {
+  content: "";
+  border-radius: 50%;
+  position: absolute;
+}
+
+div.container > div > div.O::before {
+  width: 80%;
+  height: 80%;
+  background-color: var(--blue);
+}
+
+div.container > div > div.O::after {
+  width: 40%;
+  height: 40%;
+  background-color: var(--bodyBackgroundColor);
+}
+
+div.container > div > div.opaque {
+  opacity: 0.25;
 }
 
 div.container div:first-child,
