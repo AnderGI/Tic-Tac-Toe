@@ -15,6 +15,16 @@
     <title>Document</title>
   </head>
   <body>
+    <article class="playerPoints hidden">
+      <section>
+        <strong>Player One [ X ] : </strong
+        ><span class="playerOnePoints">0</span>
+      </section>
+      <section>
+        <strong>Player Two [ O ] : </strong
+        ><span class="playerTwoPoints">0</span>
+      </section>
+    </article>
     <div class="menu">
       <p>Player One [X]</p>
       <button class="player playerOne human">Human</button>
@@ -22,9 +32,10 @@
       <p>Player Two [O]</p>
       <button class="player playerTwo human">Human</button>
       <button class="player playerTwo AI">AI</button>
-      <button id="startGameBtn">Start Game</button>
+      <button id="startGameBtn" class="disabled">Start Game</button>
     </div>
     <div class="container hidden"></div>
+    <button id="backToMenu" class="hidden">&#9194; Back To Menu</button>
     <script src="app.js"></script>
   </body>
 </html>

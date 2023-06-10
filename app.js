@@ -106,7 +106,12 @@ const Controller = (function () {
 
   //Methods
 
-  const changeTurn = () => (player1Turn = !player1Turn);
+  const setPlayerOneTurn = (turn) => {
+    player1Turn = turn;
+  };
+  const changeTurn = () => {
+    player1Turn = !player1Turn;
+  };
 
   const _checkDraw = (status) => {
     const gameboard = Gameboard.getGameboard();
@@ -152,6 +157,13 @@ const Controller = (function () {
     return status;
   };
 
+  const resetPlayerPoints = () => {
+    if (playerOne !== null && playerTwo !== null) {
+      playerOne.setPoints(0);
+      playerTwo.setPoints(0);
+    }
+  };
+
   const checkGameStatus = () => {
     let status = {
       winnerSymbol: "N", //X for player1 or O for player two
@@ -184,30 +196,33 @@ const Controller = (function () {
   };
 
   const playerMove = (domIndex) => {
-    const [xCoordinate, yCoordinate] = domIndexToArrayIndex[domIndex];
-    player1Turn === true
-      ? playerOne.makeMove(xCoordinate, yCoordinate)
-      : playerTwo.makeMove(xCoordinate, yCoordinate);
+    if (domIndex != -1) {
+      //once a cell is clicked it cannot be clicked (pointer events to none so the index if the user clicks will be -1)
+      const [xCoordinate, yCoordinate] = domIndexToArrayIndex[domIndex];
+      player1Turn === true
+        ? playerOne.makeMove(xCoordinate, yCoordinate)
+        : playerTwo.makeMove(xCoordinate, yCoordinate);
 
-    //mirar estado y renderizar mensaje en funcion a ello
-    const { winnerSymbol, gameStatus } = checkGameStatus();
-    console.log(winnerSymbol, gameStatus);
-    if (gameStatus === "Draw") {
-      //DOM.renderGameMessage("Its a draw !!!!");
-      console.log("Its a draw !!!!");
+      //mirar estado y renderizar mensaje en funcion a ello
+      const { winnerSymbol, gameStatus } = checkGameStatus();
+
+      if (gameStatus === "Draw" || gameStatus === "End") {
+        if (gameStatus === "End") {
+          winnerSymbol === playerOne.getMarker()
+            ? playerOne.increasePoints()
+            : playerTwo.increasePoints();
+        }
+
+        DOM.newMatch();
+        DOM.renderGameStatus({
+          playerOne: playerOne.getPoints(),
+          playerTwo: playerTwo.getPoints(),
+        });
+      }
+
+      //cambiar turno
+      changeTurn();
     }
-
-    if (gameStatus === "End") {
-      winnerSymbol === playerOne.getMarker()
-        ? playerOne.increasePoints()
-        : playerTwo.increasePoints();
-
-      //DOM.renderGameMessage(`${winnerSymbol} winssssss!`);
-      console.log(`${winnerSymbol} winssssss!`);
-    }
-
-    //cambiar turno
-    changeTurn();
   };
 
   return {
@@ -215,6 +230,8 @@ const Controller = (function () {
     createPlayers,
     getPlayerMarker,
     playerMove,
+    setPlayerOneTurn,
+    resetPlayerPoints,
   };
 })();
 
@@ -227,6 +244,12 @@ const DOM = (function () {
 
   //Const gameboard container
   const gameboardContainer = document.querySelector("div.container");
+
+  //Player Points article
+  const playerPointsArticle = document.querySelector("article.playerPoints");
+
+  //Back to menu btn
+  const backToMenuBtn = document.getElementById("backToMenu");
 
   //select player one and two buttons
   const removeSelectedClassFromBtnGroup = (classname) => {
@@ -282,6 +305,15 @@ const DOM = (function () {
     gameboardContainer.classList.remove("hidden");
   };
 
+  const renderPlayerPointsArticle = () => {
+    playerPointsArticle.classList.remove("hidden");
+    //if rendered a new game has begun so pointers to zero
+    renderGameStatus({
+      playerOne: 0,
+      playerTwo: 0,
+    });
+  };
+
   const cellClicked = (target) => {
     //add class X or O accoding to players turn
     target.classList.add(Controller.getPlayerMarker(), "clicked");
@@ -289,6 +321,27 @@ const DOM = (function () {
     Controller.playerMove(
       [...document.querySelectorAll("div.cell")].indexOf(target.parentElement)
     );
+  };
+
+  const gameboardCellEvents = () => {
+    //Gameboard cells
+    const cells = [...document.querySelectorAll("div.cell")];
+    cells.forEach((cell) => {
+      cell.addEventListener("mouseover", (e) => {
+        const target = e.target;
+        target.classList.add(Controller.getPlayerMarker(), "opaque");
+
+        cell.addEventListener("mouseout", (e) => {
+          const target = e.target;
+          target.classList.remove(Controller.getPlayerMarker(), "opaque");
+        });
+      });
+
+      cell.addEventListener("click", (e) => {
+        const target = e.target;
+        cellClicked(target);
+      });
+    });
   };
 
   const registerEvents = () => {
@@ -300,33 +353,70 @@ const DOM = (function () {
       startGameBtnClicked();
       hideMenuContainer();
       renderGameboard();
-
-      //Gameboard cells
-      const cells = [...document.querySelectorAll("div.cell")];
-      cells.forEach((cell) => {
-        cell.addEventListener("mouseover", (e) => {
-          const target = e.target;
-          target.classList.add(Controller.getPlayerMarker(), "opaque");
-
-          cell.addEventListener("mouseout", (e) => {
-            const target = e.target;
-            target.classList.remove(Controller.getPlayerMarker(), "opaque");
-          });
-        });
-
-        cell.addEventListener("click", (e) => {
-          const target = e.target;
-          cellClicked(target);
-        });
-      });
+      renderPlayerPointsArticle();
+      gameboardCellEvents();
+      //render back to the menu btn
+      backToMenuBtn.classList.remove("hidden");
     });
+
+    backToMenuBtn.addEventListener("click", renderMenu);
+  };
+
+  const renderGameStatus = (status) => {
+    const playerOnePointsSpan = document.querySelector("span.playerOnePoints");
+    playerOnePointsSpan.textContent = status.playerOne;
+    const playerTwoPointsSpan = document.querySelector("span.playerTwoPoints");
+    playerTwoPointsSpan.textContent = status.playerTwo;
+  };
+
+  const newMatch = () => {
+    const cells = [...document.querySelectorAll("div.cell")];
+    for (const cell of cells) {
+      const childDiv = [...cell.children][0];
+      childDiv.removeAttribute("class");
+    }
+    Gameboard.resetGameboard();
+    renderGameboard();
+    gameboardCellEvents();
+  };
+
+  const renderMenu = () => {
+    //set article visible
+    const menu = document.querySelector("div.menu");
+    if (menu.classList.contains("hidden")) {
+      menu.classList.remove("hidden");
+    }
+
+    //remove the selected classes from the btns
+    const selectedMenuBtns = [...menu.children]
+      .filter((el) => el.classList.contains("selected"))
+      .forEach((btn) => btn.classList.remove("selected"));
+
+    //set container hidden
+    const gameboardContainer = document.querySelector("div.container");
+    if (!gameboardContainer.classList.contains("hidden")) {
+      gameboardContainer.classList.add("hidden");
+      //hide player points section it will work in concordance with gameboardContainer and back to the menu btn
+      playerPointsArticle.classList.add("hidden");
+      backToMenuBtn.classList.add("hidden");
+    }
+
+    //set playerone turn true
+    Controller.setPlayerOneTurn(true);
+
+    //reset player points
+    Controller.resetPlayerPoints();
+
+    registerEvents();
   };
 
   return {
-    registerEvents,
+    renderMenu,
+    renderGameStatus,
+    newMatch,
   };
 })();
 
 window.addEventListener("DOMContentLoaded", () => {
-  DOM.registerEvents();
+  DOM.renderMenu();
 });
