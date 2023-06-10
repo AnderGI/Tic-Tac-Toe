@@ -191,19 +191,19 @@ const Controller = (function () {
 
     //mirar estado y renderizar mensaje en funcion a ello
     const { winnerSymbol, gameStatus } = checkGameStatus();
-    console.log(winnerSymbol, gameStatus);
-    if (gameStatus === "Draw") {
-      //DOM.renderGameMessage("Its a draw !!!!");
-      console.log("Its a draw !!!!");
-    }
 
-    if (gameStatus === "End") {
-      winnerSymbol === playerOne.getMarker()
-        ? playerOne.increasePoints()
-        : playerTwo.increasePoints();
+    if (gameStatus === "Draw" || gameStatus === "End") {
+      if (gameStatus === "End") {
+        winnerSymbol === playerOne.getMarker()
+          ? playerOne.increasePoints()
+          : playerTwo.increasePoints();
+        DOM.newGame();
+      }
 
-      //DOM.renderGameMessage(`${winnerSymbol} winssssss!`);
-      console.log(`${winnerSymbol} winssssss!`);
+      DOM.renderGameStatus({
+        playerOne: playerOne.getPoints(),
+        playerTwo: playerTwo.getPoints(),
+      });
     }
 
     //cambiar turno
@@ -227,6 +227,9 @@ const DOM = (function () {
 
   //Const gameboard container
   const gameboardContainer = document.querySelector("div.container");
+
+  //Player Points article
+  const playerPointsArticle = document.querySelector("article.playerPoints");
 
   //select player one and two buttons
   const removeSelectedClassFromBtnGroup = (classname) => {
@@ -282,6 +285,10 @@ const DOM = (function () {
     gameboardContainer.classList.remove("hidden");
   };
 
+  const renderPlayerPointsArticle = () => {
+    playerPointsArticle.classList.remove("hidden");
+  };
+
   const cellClicked = (target) => {
     //add class X or O accoding to players turn
     target.classList.add(Controller.getPlayerMarker(), "clicked");
@@ -289,6 +296,27 @@ const DOM = (function () {
     Controller.playerMove(
       [...document.querySelectorAll("div.cell")].indexOf(target.parentElement)
     );
+  };
+
+  const gameboardCellEvents = () => {
+    //Gameboard cells
+    const cells = [...document.querySelectorAll("div.cell")];
+    cells.forEach((cell) => {
+      cell.addEventListener("mouseover", (e) => {
+        const target = e.target;
+        target.classList.add(Controller.getPlayerMarker(), "opaque");
+
+        cell.addEventListener("mouseout", (e) => {
+          const target = e.target;
+          target.classList.remove(Controller.getPlayerMarker(), "opaque");
+        });
+      });
+
+      cell.addEventListener("click", (e) => {
+        const target = e.target;
+        cellClicked(target);
+      });
+    });
   };
 
   const registerEvents = () => {
@@ -300,30 +328,33 @@ const DOM = (function () {
       startGameBtnClicked();
       hideMenuContainer();
       renderGameboard();
-
-      //Gameboard cells
-      const cells = [...document.querySelectorAll("div.cell")];
-      cells.forEach((cell) => {
-        cell.addEventListener("mouseover", (e) => {
-          const target = e.target;
-          target.classList.add(Controller.getPlayerMarker(), "opaque");
-
-          cell.addEventListener("mouseout", (e) => {
-            const target = e.target;
-            target.classList.remove(Controller.getPlayerMarker(), "opaque");
-          });
-        });
-
-        cell.addEventListener("click", (e) => {
-          const target = e.target;
-          cellClicked(target);
-        });
-      });
+      renderPlayerPointsArticle();
+      gameboardCellEvents();
     });
+  };
+
+  const renderGameStatus = (status) => {
+    const playerOnePointsSpan = document.querySelector("span.playerOnePoints");
+    playerOnePointsSpan.textContent = status.playerOne;
+    const playerTwoPointsSpan = document.querySelector("span.playerTwoPoints");
+    playerTwoPointsSpan.textContent = status.playerTwo;
+  };
+
+  const newGame = () => {
+    const cells = [...document.querySelectorAll("div.cell")];
+    for (const cell of cells) {
+      const childDiv = [...cell.children][0];
+      childDiv.removeAttribute("class");
+    }
+    Gameboard.resetGameboard();
+    renderGameboard();
+    gameboardCellEvents();
   };
 
   return {
     registerEvents,
+    renderGameStatus,
+    newGame,
   };
 })();
 
