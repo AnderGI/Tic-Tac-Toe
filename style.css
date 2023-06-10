@@ -149,8 +149,18 @@ div.container div {
   position: relative;
 }
 
-div.container div.X::before,
-div.container div.X::after {
+div.container > div > div {
+  width: 90%;
+  height: 90%;
+  border: none;
+}
+
+div.container > div > div.clicked {
+  pointer-events: none;
+}
+
+div.container > div > div.X::before,
+div.container > div > div.X::after {
   content: "";
   height: 80%;
   width: 10%;
@@ -158,31 +168,35 @@ div.container div.X::after {
   background-color: var(--pink);
 }
 
-div.container div.X::before {
+div.container > div > div.X::before {
   transform: rotate(45deg);
 }
 
-div.container div.X::after {
+div.container > div > div.X::after {
   transform: rotate(-45deg);
 }
 
-div.container div.O::before,
-div.container div.O::after {
+div.container > div > div.O::before,
+div.container > div > div.O::after {
   content: "";
   border-radius: 50%;
   position: absolute;
 }
 
-div.container div.O::before {
+div.container > div > div.O::before {
   width: 80%;
   height: 80%;
   background-color: var(--blue);
 }
 
-div.container div.O::after {
+div.container > div > div.O::after {
   width: 40%;
   height: 40%;
   background-color: var(--bodyBackgroundColor);
+}
+
+div.container > div > div.opaque {
+  opacity: 0.25;
 }
 
 div.container div:first-child,

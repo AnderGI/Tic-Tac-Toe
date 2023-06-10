@@ -287,19 +287,20 @@ const DOM = (function () {
       for (let celda = 0; celda < fila.length; celda++) {
         const celdaDiv = document.createElement("div");
         celdaDiv.setAttribute("class", "cell");
+        const divChild = document.createElement("div");
+        celdaDiv.append(divChild);
         gameboardContainer.append(celdaDiv);
       }
     }
     gameboardContainer.classList.remove("hidden");
   };
 
-  const cellClicked = (e) => {
-    const btn = e.target;
+  const cellClicked = (target) => {
     //add class X or O accoding to players turn
-    btn.classList.add(Controller.getPlayerMarker());
-    //player makes a click on a cell (it has an index)
+    target.classList.add(Controller.getPlayerMarker(), "clicked");
+    //player makes a click on a cell (take the index of the parent div which is the one forming the container)
     Controller.playerMove(
-      [...document.querySelectorAll("div.cell")].indexOf(btn)
+      [...document.querySelectorAll("div.cell")].indexOf(target.parentElement)
     );
   };
 
@@ -316,8 +317,19 @@ const DOM = (function () {
       //Gameboard cells
       const cells = [...document.querySelectorAll("div.cell")];
       cells.forEach((cell) => {
+        cell.addEventListener("mouseover", (e) => {
+          const target = e.target;
+          target.classList.add(Controller.getPlayerMarker(), "opaque");
+
+          cell.addEventListener("mouseout", (e) => {
+            const target = e.target;
+            target.classList.remove(Controller.getPlayerMarker(), "opaque");
+          });
+        });
+
         cell.addEventListener("click", (e) => {
-          cellClicked(e);
+          const target = e.target;
+          cellClicked(target);
         });
       });
     });
