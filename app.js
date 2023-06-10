@@ -165,35 +165,6 @@ const Controller = (function () {
     return status;
   };
 
-  const cellClicked = (index) => {
-    //posiciones a partir de la relacion entre el indice del div del dom y el gameboard
-    const [x, y] = domIndexToArrayIndex[index];
-
-    //usuario hace ese movimiento
-    if (player1Turn) {
-      playerX.makeMove(x, y);
-    } else {
-      playerO.makeMove(x, y);
-    }
-
-    //mirar estado y renderizar mensaje en funcion a ello
-    const { winnerSymbol, gameStatus } = checkGameStatus();
-
-    if (gameStatus === "Draw") {
-      DOM.renderGameMessage("Its a draw !!!!");
-    }
-
-    if (gameStatus === "End") {
-      winnerSymbol === playerX.getMarker()
-        ? playerX.increasePoints()
-        : playerO.increasePoints();
-      DOM.renderGameMessage(`${winnerSymbol} winssssss!`);
-    }
-
-    //cambiar turno
-    changeTurn();
-  };
-
   const createHumanPlayer = (key) => {
     key === "playerOne"
       ? (playerOne = HumanPlayer("X"))
@@ -213,18 +184,34 @@ const Controller = (function () {
   };
 
   const playerMove = (domIndex) => {
-    const gameboard = Gameboard.getGameboard();
     const [xCoordinate, yCoordinate] = domIndexToArrayIndex[domIndex];
     player1Turn === true
       ? playerOne.makeMove(xCoordinate, yCoordinate)
       : playerTwo.makeMove(xCoordinate, yCoordinate);
 
+    //mirar estado y renderizar mensaje en funcion a ello
+    const { winnerSymbol, gameStatus } = checkGameStatus();
+    console.log(winnerSymbol, gameStatus);
+    if (gameStatus === "Draw") {
+      //DOM.renderGameMessage("Its a draw !!!!");
+      console.log("Its a draw !!!!");
+    }
+
+    if (gameStatus === "End") {
+      winnerSymbol === playerOne.getMarker()
+        ? playerOne.increasePoints()
+        : playerTwo.increasePoints();
+
+      //DOM.renderGameMessage(`${winnerSymbol} winssssss!`);
+      console.log(`${winnerSymbol} winssssss!`);
+    }
+
+    //cambiar turno
     changeTurn();
   };
 
   return {
     checkGameStatus,
-    cellClicked,
     createPlayers,
     getPlayerMarker,
     playerMove,
