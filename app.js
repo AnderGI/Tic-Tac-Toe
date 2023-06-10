@@ -251,6 +251,16 @@ const DOM = (function () {
   //Back to menu btn
   const backToMenuBtn = document.getElementById("backToMenu");
 
+  //check if both players have been selected to remove disabled class from start btn
+  const checkBothPlayersSelections = () => {
+    const selectedBtns = [
+      ...playerBtns.filter((btn) => btn.classList.contains("selected")),
+    ];
+    if (selectedBtns.length === 2) {
+      startGameBtn.classList.remove("disabled");
+    }
+  };
+
   //select player one and two buttons
   const removeSelectedClassFromBtnGroup = (classname) => {
     playerBtns
@@ -262,6 +272,7 @@ const DOM = (function () {
     const btn = e.target;
     removeSelectedClassFromBtnGroup([...btn.classList][1]);
     btn.classList.add("selected");
+    checkBothPlayersSelections();
   };
 
   //once startgame is clicked get the selected elements
@@ -348,16 +359,17 @@ const DOM = (function () {
     playerBtns.forEach((btn) => {
       btn.addEventListener("click", (e) => playerBtnClicked(e));
     });
-
-    startGameBtn.addEventListener("click", () => {
-      startGameBtnClicked();
-      hideMenuContainer();
-      renderGameboard();
-      renderPlayerPointsArticle();
-      gameboardCellEvents();
-      //render back to the menu btn
-      backToMenuBtn.classList.remove("hidden");
-    });
+    if (!startGameBtn.classList.contains("disabled")) {
+      startGameBtn.addEventListener("click", () => {
+        startGameBtnClicked();
+        hideMenuContainer();
+        renderGameboard();
+        renderPlayerPointsArticle();
+        gameboardCellEvents();
+        //render back to the menu btn
+        backToMenuBtn.classList.remove("hidden");
+      });
+    }
 
     backToMenuBtn.addEventListener("click", renderMenu);
   };
@@ -388,7 +400,7 @@ const DOM = (function () {
     }
 
     //remove the selected classes from the btns
-    const selectedMenuBtns = [...menu.children]
+    [...menu.children]
       .filter((el) => el.classList.contains("selected"))
       .forEach((btn) => btn.classList.remove("selected"));
 
