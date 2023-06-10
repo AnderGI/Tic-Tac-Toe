@@ -106,7 +106,12 @@ const Controller = (function () {
 
   //Methods
 
-  const changeTurn = () => (player1Turn = !player1Turn);
+  const setPlayerOneTurn = (turn) => {
+    player1Turn = turn;
+  };
+  const changeTurn = () => {
+    player1Turn = !player1Turn;
+  };
 
   const _checkDraw = (status) => {
     const gameboard = Gameboard.getGameboard();
@@ -152,6 +157,13 @@ const Controller = (function () {
     return status;
   };
 
+  const resetPlayerPoints = () => {
+    if (playerOne !== null && playerTwo !== null) {
+      playerOne.setPoints(0);
+      playerTwo.setPoints(0);
+    }
+  };
+
   const checkGameStatus = () => {
     let status = {
       winnerSymbol: "N", //X for player1 or O for player two
@@ -184,30 +196,33 @@ const Controller = (function () {
   };
 
   const playerMove = (domIndex) => {
-    const [xCoordinate, yCoordinate] = domIndexToArrayIndex[domIndex];
-    player1Turn === true
-      ? playerOne.makeMove(xCoordinate, yCoordinate)
-      : playerTwo.makeMove(xCoordinate, yCoordinate);
+    if (domIndex != -1) {
+      //once a cell is clicked it cannot be clicked (pointer events to none so the index if the user clicks will be -1)
+      const [xCoordinate, yCoordinate] = domIndexToArrayIndex[domIndex];
+      player1Turn === true
+        ? playerOne.makeMove(xCoordinate, yCoordinate)
+        : playerTwo.makeMove(xCoordinate, yCoordinate);
 
-    //mirar estado y renderizar mensaje en funcion a ello
-    const { winnerSymbol, gameStatus } = checkGameStatus();
+      //mirar estado y renderizar mensaje en funcion a ello
+      const { winnerSymbol, gameStatus } = checkGameStatus();
 
-    if (gameStatus === "Draw" || gameStatus === "End") {
-      if (gameStatus === "End") {
-        winnerSymbol === playerOne.getMarker()
-          ? playerOne.increasePoints()
-          : playerTwo.increasePoints();
-        DOM.newGame();
+      if (gameStatus === "Draw" || gameStatus === "End") {
+        if (gameStatus === "End") {
+          winnerSymbol === playerOne.getMarker()
+            ? playerOne.increasePoints()
+            : playerTwo.increasePoints();
+        }
+
+        DOM.newMatch();
+        DOM.renderGameStatus({
+          playerOne: playerOne.getPoints(),
+          playerTwo: playerTwo.getPoints(),
+        });
       }
 
-      DOM.renderGameStatus({
-        playerOne: playerOne.getPoints(),
-        playerTwo: playerTwo.getPoints(),
-      });
+      //cambiar turno
+      changeTurn();
     }
-
-    //cambiar turno
-    changeTurn();
   };
 
   return {
@@ -215,6 +230,8 @@ const Controller = (function () {
     createPlayers,
     getPlayerMarker,
     playerMove,
+    setPlayerOneTurn,
+    resetPlayerPoints,
   };
 })();
 
@@ -230,6 +247,9 @@ const DOM = (function () {
 
   //Player Points article
   const playerPointsArticle = document.querySelector("article.playerPoints");
+
+  //Back to menu btn
+  const backToMenuBtn = document.getElementById("backToMenu");
 
   //select player one and two buttons
   const removeSelectedClassFromBtnGroup = (classname) => {
@@ -287,6 +307,11 @@ const DOM = (function () {
 
   const renderPlayerPointsArticle = () => {
     playerPointsArticle.classList.remove("hidden");
+    //if rendered a new game has begun so pointers to zero
+    renderGameStatus({
+      playerOne: 0,
+      playerTwo: 0,
+    });
   };
 
   const cellClicked = (target) => {
@@ -330,7 +355,11 @@ const DOM = (function () {
       renderGameboard();
       renderPlayerPointsArticle();
       gameboardCellEvents();
+      //render back to the menu btn
+      backToMenuBtn.classList.remove("hidden");
     });
+
+    backToMenuBtn.addEventListener("click", renderMenu);
   };
 
   const renderGameStatus = (status) => {
@@ -340,7 +369,7 @@ const DOM = (function () {
     playerTwoPointsSpan.textContent = status.playerTwo;
   };
 
-  const newGame = () => {
+  const newMatch = () => {
     const cells = [...document.querySelectorAll("div.cell")];
     for (const cell of cells) {
       const childDiv = [...cell.children][0];
@@ -351,13 +380,43 @@ const DOM = (function () {
     gameboardCellEvents();
   };
 
+  const renderMenu = () => {
+    //set article visible
+    const menu = document.querySelector("div.menu");
+    if (menu.classList.contains("hidden")) {
+      menu.classList.remove("hidden");
+    }
+
+    //remove the selected classes from the btns
+    const selectedMenuBtns = [...menu.children]
+      .filter((el) => el.classList.contains("selected"))
+      .forEach((btn) => btn.classList.remove("selected"));
+
+    //set container hidden
+    const gameboardContainer = document.querySelector("div.container");
+    if (!gameboardContainer.classList.contains("hidden")) {
+      gameboardContainer.classList.add("hidden");
+      //hide player points section it will work in concordance with gameboardContainer and back to the menu btn
+      playerPointsArticle.classList.add("hidden");
+      backToMenuBtn.classList.add("hidden");
+    }
+
+    //set playerone turn true
+    Controller.setPlayerOneTurn(true);
+
+    //reset player points
+    Controller.resetPlayerPoints();
+
+    registerEvents();
+  };
+
   return {
-    registerEvents,
+    renderMenu,
     renderGameStatus,
-    newGame,
+    newMatch,
   };
 })();
 
 window.addEventListener("DOMContentLoaded", () => {
-  DOM.registerEvents();
+  DOM.renderMenu();
 });
