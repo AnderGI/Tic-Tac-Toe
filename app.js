@@ -359,17 +359,16 @@ const DOM = (function () {
     playerBtns.forEach((btn) => {
       btn.addEventListener("click", (e) => playerBtnClicked(e));
     });
-    if (!startGameBtn.classList.contains("disabled")) {
-      startGameBtn.addEventListener("click", () => {
-        startGameBtnClicked();
-        hideMenuContainer();
-        renderGameboard();
-        renderPlayerPointsArticle();
-        gameboardCellEvents();
-        //render back to the menu btn
-        backToMenuBtn.classList.remove("hidden");
-      });
-    }
+
+    startGameBtn.addEventListener("click", () => {
+      startGameBtnClicked();
+      hideMenuContainer();
+      renderGameboard();
+      renderPlayerPointsArticle();
+      gameboardCellEvents();
+      //render back to the menu btn
+      backToMenuBtn.classList.remove("hidden");
+    });
 
     backToMenuBtn.addEventListener("click", renderMenu);
   };
